@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "ru.itmo.asurkis"
-version = "1.0-SNAPSHOT"
+version = "0.1"
 
 repositories {
     mavenCentral()
@@ -28,5 +28,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("ru.itmo.asurkis.test.fakemake.MainKt")
 }

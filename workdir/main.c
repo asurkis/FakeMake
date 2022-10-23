@@ -1,6 +1,6 @@
 #include <stdio.h>
 
 int main() {
-    puts("Updated file");
+    puts("Hello, world!");
     return 0;
 }

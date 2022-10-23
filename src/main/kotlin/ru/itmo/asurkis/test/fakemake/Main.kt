@@ -1,4 +1,7 @@
+package ru.itmo.asurkis.test.fakemake
+
 import com.charleskorn.kaml.Yaml
+import com.charleskorn.kaml.decodeFromStream
 import kotlinx.serialization.*
 import java.io.File
 import java.io.FileNotFoundException
@@ -16,6 +19,11 @@ class TargetLoopException(
 class ChildProcessException(val retCode: Int, val command: String) : Exception() {
     override val message: String
         get() = "Command \"$command\" finished with exit code $retCode"
+}
+
+class TargetNotFoundException(val name: String) : Exception() {
+    override val message: String
+        get() = "Target \"$name\" not found"
 }
 
 @Serializable
@@ -59,7 +67,7 @@ data class Target(
 
     fun satisfyFile(targetFile: File?, name: String): Boolean {
         val f = File(name)
-        if (!f.exists()) throw FileNotFoundException("Required file not found: $name")
+        if (!f.exists()) throw FileNotFoundException(name)
         return targetFile == null || !targetFile.exists() || targetFile.lastModified() < f.lastModified()
     }
 
@@ -75,31 +83,18 @@ data class Target(
     }
 }
 
-fun main(/*args: Array<String>*/) {
-    val input = """
-        default:
-          dependencies:
-          - run
-        run:
-          dependencies:
-          - main
-          - build
-          run: ./main
-        compile:
-          dependencies:
-          - main.c
-          target: main.o
-          run: gcc -c main.c -o main.o
-        build:
-          dependencies:
-          - compile
-          target: main
-          run: gcc main.o -o main
-    """.trimIndent()
-
+fun main(args: Array<String>) {
     try {
-        val allTargets: Map<String, Target> = Yaml.default.decodeFromString(input)
+        val inputFile = File("fake.yaml")
+        val inputStream = inputFile.inputStream()
+        val allTargets: Map<String, Target> = Yaml.default.decodeFromStream(inputStream)
+        for (arg in args) {
+            allTargets[arg]?.satisfy(allTargets) ?: throw TargetNotFoundException(arg)
+        }
         allTargets["default"]?.satisfy(allTargets)
+    } catch (e: FileNotFoundException) {
+        System.err.println("File not found: ${e.message}")
+        exitProcess(1)
     } catch (e: Exception) {
         System.err.println(e.message)
         exitProcess(1)
