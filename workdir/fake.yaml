@@ -4,8 +4,8 @@ default:
 
 run:
   dependencies:
-    - main
     - build
+    - main
   run: ./main
 
 compile:
@@ -19,3 +19,6 @@ build:
     - compile
   target: main
   run: gcc main.o -o main
+
+clean:
+  run: rm -rf *.o main

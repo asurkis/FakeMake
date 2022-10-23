@@ -7,13 +7,13 @@ import java.io.File
 import java.io.FileNotFoundException
 import kotlin.system.exitProcess
 
-class TargetLoopException(
-    val loopStart: Target,
+class SectionLoopException(
+    val loopStart: Section,
     var loopComplete: Boolean = false,
     val loopParts: MutableList<String> = mutableListOf()
 ) : Exception() {
     override val message: String
-        get() = "Loop of targets detected: ${loopParts.joinToString(" -> ")}"
+        get() = "Loop of sections detected: ${loopParts.joinToString(" -> ")}"
 }
 
 class ChildProcessException(val retCode: Int, val command: String) : Exception() {
@@ -21,34 +21,33 @@ class ChildProcessException(val retCode: Int, val command: String) : Exception()
         get() = "Command \"$command\" finished with exit code $retCode"
 }
 
-class TargetNotFoundException(val name: String) : Exception() {
+class SectionNotFoundException(val name: String) : Exception() {
     override val message: String
-        get() = "Target \"$name\" not found"
+        get() = "Section \"$name\" not found"
 }
 
 @Serializable
-open class Target(
+open class Section(
     val dependencies: List<String> = listOf(),
-    @SerialName("target")
-    val targetFileName: String? = null,
+    val target: String? = null,
     @SerialName("run")
     val runCommand: String? = null
 ) {
     private var isSatisfied = false
     private var dfsProcess = false
 
-    fun satisfy(targetMap: Map<String, Target>): Boolean {
+    fun satisfy(sectionMap: Map<String, Section>): Boolean {
         if (isSatisfied) return true
-        if (dfsProcess) throw TargetLoopException(this)
+        if (dfsProcess) throw SectionLoopException(this)
         dfsProcess = true
         var runRequired = dependencies.isEmpty()
-        val targetFile = if (targetFileName != null) File(targetFileName) else null
+        val targetFile = if (target != null) File(target) else null
         for (key in dependencies) {
             try {
-                if (targetMap[key]?.satisfy(targetMap) ?: satisfyFile(targetFile, key)) {
+                if (sectionMap[key]?.satisfy(sectionMap) ?: satisfyFile(targetFile, key)) {
                     runRequired = true
                 }
-            } catch (e: TargetLoopException) {
+            } catch (e: SectionLoopException) {
                 if (!e.loopComplete) {
                     e.loopParts.add(0, key)
                     if (this === e.loopStart) {
@@ -87,12 +86,12 @@ fun main(args: Array<String>) {
     try {
         val inputFile = File("fake.yaml")
         val inputStream = inputFile.inputStream()
-        val allTargets: Map<String, Target> = Yaml.default.decodeFromStream(inputStream)
+        val allSections: Map<String, Section> = Yaml.default.decodeFromStream(inputStream)
         if (args.isEmpty()) {
-            allTargets["default"]?.satisfy(allTargets)
+            allSections["default"]?.satisfy(allSections)
         } else {
             for (arg in args) {
-                allTargets[arg]?.satisfy(allTargets) ?: throw TargetNotFoundException(arg)
+                allSections[arg]?.satisfy(allSections) ?: throw SectionNotFoundException(arg)
             }
         }
     } catch (e: FileNotFoundException) {
