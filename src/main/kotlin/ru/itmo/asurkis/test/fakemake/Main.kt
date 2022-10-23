@@ -88,10 +88,13 @@ fun main(args: Array<String>) {
         val inputFile = File("fake.yaml")
         val inputStream = inputFile.inputStream()
         val allTargets: Map<String, Target> = Yaml.default.decodeFromStream(inputStream)
-        for (arg in args) {
-            allTargets[arg]?.satisfy(allTargets) ?: throw TargetNotFoundException(arg)
+        if (args.isEmpty()) {
+            allTargets["default"]?.satisfy(allTargets)
+        } else {
+            for (arg in args) {
+                allTargets[arg]?.satisfy(allTargets) ?: throw TargetNotFoundException(arg)
+            }
         }
-        allTargets["default"]?.satisfy(allTargets)
     } catch (e: FileNotFoundException) {
         System.err.println("File not found: ${e.message}")
         exitProcess(1)
