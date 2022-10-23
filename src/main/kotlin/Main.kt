@@ -4,6 +4,15 @@ import java.io.File
 import java.io.FileNotFoundException
 import kotlin.system.exitProcess
 
+class TargetLoopException(
+    val loopStart: Target,
+    var loopComplete: Boolean = false,
+    val loopParts: MutableList<String> = mutableListOf()
+) : Exception() {
+    override val message: String
+        get() = "Loop of targets detected: ${loopParts.joinToString(" -> ")}"
+}
+
 @Serializable
 data class Target(
     val dependencies: List<String> = listOf(),
@@ -15,14 +24,28 @@ data class Target(
     private var isSatisfied = false
     private var dfsProcess = false
 
-    fun satisfy(allTargets: Map<String, Target>): Boolean {
+    fun satisfy(targetMap: Map<String, Target>): Boolean {
         if (isSatisfied) return true
+        if (dfsProcess) {
+            throw TargetLoopException(this)
+        }
         dfsProcess = true
         var runRequired = dependencies.isEmpty()
         val targetFile = if (targetFileName != null) File(targetFileName) else null
         for (key in dependencies) {
-            if (allTargets[key]?.satisfy(allTargets) ?: satisfyFile(targetFile, key)) {
-                runRequired = true
+            try {
+                if (targetMap[key]?.satisfy(targetMap) ?: satisfyFile(targetFile, key)) {
+                    runRequired = true
+                }
+            } catch (e: TargetLoopException) {
+                if (!e.loopComplete) {
+                    e.loopParts.add(0, key)
+                    if (this === e.loopStart) {
+                        e.loopParts.add(key)
+                        e.loopComplete = true
+                    }
+                }
+                throw e
             }
         }
         if (runRequired) {
@@ -42,7 +65,9 @@ data class Target(
     }
 
     fun makeRun() {
-        println(runCommand)
+        if (runCommand != null) {
+            println(runCommand)
+        }
     }
 }
 
@@ -53,8 +78,9 @@ fun main(/*args: Array<String>*/) {
           - build
           - compile
         compile:
-          # dependencies:
+          dependencies:
           # - main.c
+          - build
           target: main.o
           run: gcc -c main.c -o main.o
         build:
@@ -66,8 +92,8 @@ fun main(/*args: Array<String>*/) {
 
     val allTargets: Map<String, Target> = Yaml.default.decodeFromString(input)
     try {
-        println(allTargets["default"]?.satisfy(allTargets))
-    } catch (e: FileNotFoundException) {
+        allTargets["default"]?.satisfy(allTargets)
+    } catch (e: Exception) {
         System.err.println(e.message)
         exitProcess(1)
     }
