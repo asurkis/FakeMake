@@ -27,7 +27,7 @@ class TargetNotFoundException(val name: String) : Exception() {
 }
 
 @Serializable
-data class Target(
+open class Target(
     val dependencies: List<String> = listOf(),
     @SerialName("target")
     val targetFileName: String? = null,
@@ -71,7 +71,7 @@ data class Target(
         return targetFile == null || !targetFile.exists() || targetFile.lastModified() < f.lastModified()
     }
 
-    fun makeRun() {
+    open fun makeRun() {
         if (runCommand == null) return
         println("Running command: $runCommand")
         val pb = ProcessBuilder("bash", "-c", "--", runCommand)
