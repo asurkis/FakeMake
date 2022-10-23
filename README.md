@@ -81,3 +81,16 @@ into a depth-first search by sections.
 
 For reading YAML I used [kaml](https://github.com/charleskorn/kaml)
 and [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization/).
+                                       
+Project is organized using Gradle, so main commands are (in the project root directory):
+```shell
+gradle test # for testing
+```
+```shell
+gradle jar # for packing the JAR in build/libs
+```
+```shell
+gradle clean # for deleting build files
+```
+                                
+Compiled example can be found on the Releases page.

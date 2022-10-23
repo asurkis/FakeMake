@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce677abc-b388-45ce-929f-f42559be3f57" name="Changes" comment="Refactor and add README.md">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+    <list default="true" id="ce677abc-b388-45ce-929f-f42559be3f57" name="Changes" comment="Update version to 1.0">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,6 +95,7 @@
       <recent name="$PROJECT_DIR$/src/test/kotlin" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/example" />
       <recent name="$PROJECT_DIR$/workdir" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
@@ -317,7 +317,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666528054677</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Update version to 1.0">
+      <created>1666528373649</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1666528373649</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -345,7 +352,8 @@
     <MESSAGE value="Add bash script" />
     <MESSAGE value="Modify CI" />
     <MESSAGE value="Refactor and add README.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor and add README.md" />
+    <MESSAGE value="Update version to 1.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update version to 1.0" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
