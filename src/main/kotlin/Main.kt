@@ -13,6 +13,11 @@ class TargetLoopException(
         get() = "Loop of targets detected: ${loopParts.joinToString(" -> ")}"
 }
 
+class ChildProcessException(val retCode: Int, val command: String) : Exception() {
+    override val message: String
+        get() = "Command \"$command\" finished with exit code $retCode"
+}
+
 @Serializable
 data class Target(
     val dependencies: List<String> = listOf(),
@@ -26,9 +31,7 @@ data class Target(
 
     fun satisfy(targetMap: Map<String, Target>): Boolean {
         if (isSatisfied) return true
-        if (dfsProcess) {
-            throw TargetLoopException(this)
-        }
+        if (dfsProcess) throw TargetLoopException(this)
         dfsProcess = true
         var runRequired = dependencies.isEmpty()
         val targetFile = if (targetFileName != null) File(targetFileName) else null
@@ -48,9 +51,7 @@ data class Target(
                 throw e
             }
         }
-        if (runRequired) {
-            makeRun()
-        }
+        if (runRequired) makeRun()
         isSatisfied = true
         dfsProcess = false
         return runRequired
@@ -58,15 +59,18 @@ data class Target(
 
     fun satisfyFile(targetFile: File?, name: String): Boolean {
         val f = File(name)
-        if (!f.exists()) {
-            throw FileNotFoundException("Required file not found: $name")
-        }
+        if (!f.exists()) throw FileNotFoundException("Required file not found: $name")
         return targetFile == null || !targetFile.exists() || targetFile.lastModified() < f.lastModified()
     }
 
     fun makeRun() {
-        if (runCommand != null) {
-            println(runCommand)
+        if (runCommand == null) return
+        println("Running command: $runCommand")
+        val pb = ProcessBuilder("bash", "-c", "--", runCommand)
+        pb.inheritIO()
+        val retCode = pb.start().waitFor()
+        if (0 != retCode) {
+            throw ChildProcessException(retCode, runCommand)
         }
     }
 }
@@ -75,12 +79,15 @@ fun main(/*args: Array<String>*/) {
     val input = """
         default:
           dependencies:
+          - run
+        run:
+          dependencies:
+          - main
           - build
-          - compile
+          run: ./main
         compile:
           dependencies:
-          # - main.c
-          - build
+          - main.c
           target: main.o
           run: gcc -c main.c -o main.o
         build:
@@ -90,8 +97,8 @@ fun main(/*args: Array<String>*/) {
           run: gcc main.o -o main
     """.trimIndent()
 
-    val allTargets: Map<String, Target> = Yaml.default.decodeFromString(input)
     try {
+        val allTargets: Map<String, Target> = Yaml.default.decodeFromString(input)
         allTargets["default"]?.satisfy(allTargets)
     } catch (e: Exception) {
         System.err.println(e.message)
