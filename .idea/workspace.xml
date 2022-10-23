@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce677abc-b388-45ce-929f-f42559be3f57" name="Changes" comment="Add loop detection">
-      <change afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-    </list>
+    <list default="true" id="ce677abc-b388-45ce-929f-f42559be3f57" name="Changes" comment="Add actual command execution" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -121,7 +117,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666514213168</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Add actual command execution">
+      <created>1666516127745</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1666516127745</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -141,6 +144,7 @@
     <MESSAGE value="Add graph traverser and file checker" />
     <MESSAGE value="Add nullability of fields" />
     <MESSAGE value="Add loop detection" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add loop detection" />
+    <MESSAGE value="Add actual command execution" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add actual command execution" />
   </component>
 </project>
