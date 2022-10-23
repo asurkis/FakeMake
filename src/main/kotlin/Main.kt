@@ -5,33 +5,56 @@ import java.io.FileNotFoundException
 import kotlin.system.exitProcess
 
 @Serializable
-data class Target(val dependencies: List<String>, val target: String, val run: String) {
+data class Target(
+    val dependencies: List<String> = listOf(),
+    @SerialName("target")
+    val targetFileName: String? = null,
+    @SerialName("run")
+    val runCommand: String? = null
+) {
+    private var isSatisfied = false
+    private var dfsProcess = false
+
     fun satisfy(allTargets: Map<String, Target>): Boolean {
-        var updateRequired = false
-        val targetFile = File(target)
+        if (isSatisfied) return true
+        dfsProcess = true
+        var runRequired = dependencies.isEmpty()
+        val targetFile = if (targetFileName != null) File(targetFileName) else null
         for (key in dependencies) {
-            updateRequired = allTargets[key]?.satisfy(allTargets) ?: satisfyFile(targetFile, key) || updateRequired
+            if (allTargets[key]?.satisfy(allTargets) ?: satisfyFile(targetFile, key)) {
+                runRequired = true
+            }
         }
-        if (updateRequired) {
-            println(run)
+        if (runRequired) {
+            makeRun()
         }
-        return updateRequired
+        isSatisfied = true
+        dfsProcess = false
+        return runRequired
     }
 
-    fun satisfyFile(targetFile: File, name: String): Boolean {
+    fun satisfyFile(targetFile: File?, name: String): Boolean {
         val f = File(name)
         if (!f.exists()) {
             throw FileNotFoundException("Required file not found: $name")
         }
-        return !targetFile.exists() || targetFile.lastModified() < f.lastModified()
+        return targetFile == null || !targetFile.exists() || targetFile.lastModified() < f.lastModified()
+    }
+
+    fun makeRun() {
+        println(runCommand)
     }
 }
 
 fun main(/*args: Array<String>*/) {
     val input = """
-        compile:
+        default:
           dependencies:
-          - main.c
+          - build
+          - compile
+        compile:
+          # dependencies:
+          # - main.c
           target: main.o
           run: gcc -c main.c -o main.o
         build:
@@ -43,7 +66,7 @@ fun main(/*args: Array<String>*/) {
 
     val allTargets: Map<String, Target> = Yaml.default.decodeFromString(input)
     try {
-        println(allTargets["build"]?.satisfy(allTargets))
+        println(allTargets["default"]?.satisfy(allTargets))
     } catch (e: FileNotFoundException) {
         System.err.println(e.message)
         exitProcess(1)
