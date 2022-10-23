@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce677abc-b388-45ce-929f-f42559be3f57" name="Changes" comment="Modify CI">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/gradle.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/gradle.yml" afterDir="false" />
+    <list default="true" id="ce677abc-b388-45ce-929f-f42559be3f57" name="Changes" comment="Refactor and add README.md">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/itmo/asurkis/test/fakemake/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/itmo/asurkis/test/fakemake/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/ru/itmo/asurkis/test/fakemake/tests/Tests.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/ru/itmo/asurkis/test/fakemake/tests/Tests.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workdir/fake" beforeDir="false" afterPath="$PROJECT_DIR$/workdir/fake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workdir/fake.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/workdir/fake.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +102,7 @@
       <recent name="ru.itmo.asurkis.test.fakemake.tests" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FakeMake [test]">
+  <component name="RunManager" selected="Kotlin.MainKt">
     <configuration name="FakeMake [clean]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -197,7 +191,7 @@
       <option name="MAIN_CLASS_NAME" value="ru.itmo.asurkis.test.fakemake.MainKt" />
       <module name="FakeMake.main" />
       <shortenClasspath name="NONE" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/workdir" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/example" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -316,7 +310,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666525491019</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Refactor and add README.md">
+      <created>1666528054677</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1666528054677</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -343,7 +344,8 @@
     <MESSAGE value="Add tests" />
     <MESSAGE value="Add bash script" />
     <MESSAGE value="Modify CI" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modify CI" />
+    <MESSAGE value="Refactor and add README.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor and add README.md" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
